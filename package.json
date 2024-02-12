@@ -1,11 +1,12 @@
 {
-  "name": "swggr-ts-gen",
+  "name": "@romuleald/swggr-ts-gen",
   "version": "1.0.0",
   "type": "commonjs",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "private": false,
   "scripts": {
     "build:commonjs": "tsc",
     "build:module": "tsc -p tsconfig.esm.json",
