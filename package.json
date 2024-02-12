@@ -1,0 +1,29 @@
+{
+  "name": "swggr-ts-gen",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:commonjs": "tsc",
+    "build:module": "tsc -p tsconfig.esm.json",
+    "build": "npm run build:commonjs && npm run build:module",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "swggr-ts-gen": "bin/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "swagger-typescript-api": "^13.0.3"
+  }
+}
