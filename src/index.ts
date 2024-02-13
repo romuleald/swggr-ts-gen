@@ -1,14 +1,9 @@
-import { dirname } from "path";
 import { generateApi } from "swagger-typescript-api";
 
-// if (process.env.phrase_token === undefined || process.env.phrase_project_id === undefined) {
-//   throw new Error('Missing Phrase token or project id');
-// }
-
-const config = require(process.env.npm_package_json)["swggr-ts-gen"];
-const apis = config.apis;
+const config = require(process.env.npm_package_json)?.["swggr-ts-gen"];
+const apis = config?.apis;
 if (!Array.isArray(apis)) {
-  throw new Error("lol ya ri1");
+  throw new Error("Missing configuration, refer to readme file");
 }
 
 (async () => {
