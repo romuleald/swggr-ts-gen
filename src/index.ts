@@ -1,27 +1,34 @@
 import { GenerateApiParams, generateApi } from "swagger-typescript-api";
 import fs from "fs";
 
-const path = `${process.env.INIT_CWD}/dto/jsons/`;
-const config = require(process.env.npm_package_json)?.[
-  "swggr-ts-gen"
-] as Record<"apis", Array<{ file?: string; name: string; url?: string }>>;
+interface Config {
+  apis: Array<{ file?: string; name: string; url?: string }>;
+  output: string;
+  localJson: string | undefined;
+  typePrefix: boolean | undefined;
+}
+
+const projectPackage = process.env.npm_package_json;
+const projectPath = process.env.INIT_CWD;
+const config = require(projectPackage)?.["swggr-ts-gen"] as Config;
+const jsonPath = config.localJson;
 
 const apis = config?.apis.concat(
   ...fs
-    .readdirSync(path)
-    .map((a) => ({ file: path + a, name: a.split(".")[0] ?? a })),
+    .readdirSync(jsonPath)
+    .map((a) => ({ file: `${jsonPath}/${a}`, name: a.split(".")[0] ?? a })),
 );
-console.log({ apis });
 
-if (!Array.isArray(apis)) {
+if (!Array.isArray(apis) || (!jsonPath && !config.output)) {
+  console.table(config);
   throw new Error("Missing configuration, refer to readme file");
 }
 
 (async () => {
   await Promise.all(
     apis.map(async (api) => {
-      const path = `${process.env.INIT_CWD}/dto/types/`;
-      const conf: GenerateApiParams = api.url
+      const path = `${projectPath}/${config.output}`;
+      const apiOutput: GenerateApiParams = api.url
         ? {
             url: api.url,
             output: path,
@@ -32,9 +39,12 @@ if (!Array.isArray(apis)) {
             output: path,
             name: api.name,
           };
-      console.log({ conf });
 
-      return generateApi(conf);
+      if (config.typePrefix) {
+        apiOutput.typePrefix = api.name;
+      }
+
+      return generateApi(apiOutput);
     }),
   );
   // sometimes process is not release
